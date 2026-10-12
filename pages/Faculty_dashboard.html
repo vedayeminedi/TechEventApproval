@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EventPass - Faculty Dashboard</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  /* ===== Design tokens (colours eyeballed from the student dashboard screenshot) ===== */
+  :root {
+    --navy: #18233f; --navy-active: #2b3a60; --bg: #f5f6fa; --card: #ffffff; --line: #e8ebf3;
+    --text: #1c2540; --muted: #7a849c; --blue: #3558d8; --blue-dark: #2b448f;
+    --green: #15803d; --red: #b42318;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body { margin: 0; font-family: Inter, "Segoe UI", Arial, sans-serif; background: var(--bg); color: var(--text);
+         padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  :focus-visible { outline: 3px solid #7c9bff; outline-offset: 2px; }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* ===== Layout ===== */
+  .app { display: flex; min-height: 100vh; }
+  .side { width: 262px; background: var(--navy); color: #fff; padding: 36px 20px 24px; display: flex; flex-direction: column; flex-shrink: 0; }
+  .brand { font-size: 30px; font-weight: 700; margin: 0 0 4px 0; padding-left: 4px; }
+  .brand-sub { font-size: 12px; letter-spacing: .12em; font-weight: 600; color: #8f9bb8; padding-left: 4px; margin-bottom: 44px; }
+  .nav { display: flex; flex-direction: column; gap: 8px; }
+  .nav button { text-align: left; background: none; border: 0; color: #c9d1e6; font-size: 16px; padding: 14px 16px; border-radius: 10px; }
+  .nav button:hover { background: rgba(255,255,255,.06); }
+  .nav button.on { background: var(--navy-active); color: #fff; font-weight: 500; }
+  .side-foot { margin-top: auto; font-size: 14px; color: #9aa6c2; padding-left: 4px; }
+  .main { flex: 1; min-width: 0; padding: 48px 44px 40px; max-width: 1400px; }
+
+  /* ===== Page header ===== */
+  .head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; }
+  .eyebrow { font-size: 13px; letter-spacing: .1em; font-weight: 600; color: #8a94ad; margin: 0 0 12px; }
+  h1 { font-size: 36px; margin: 0 0 14px; line-height: 1.1; }
+  .sub { color: var(--muted); font-size: 16px; margin: 0; }
+  .avatar { width: 54px; height: 54px; border-radius: 50%; background: #dfe6fb; color: #3b4fd0; font-weight: 700;
+            font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* ===== Hero banner ===== */
+  .hero { background: linear-gradient(100deg, var(--blue-dark), #4666d9); color: #fff; border-radius: 20px; padding: 36px 34px;
+          display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 28px; }
+  .hero small { font-size: 13px; letter-spacing: .08em; font-weight: 600; }
+  .hero h2 { font-size: 28px; margin: 12px 0 14px; }
+  .hero p { margin: 0; font-size: 16px; opacity: .92; }
+  .hero-btn { background: #fff; color: var(--blue-dark); border: 0; padding: 16px 24px; border-radius: 12px; font-size: 18px; font-weight: 600; white-space: nowrap; }
+
+  /* ===== Stat cards ===== */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 22px; margin-bottom: 28px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px; }
+  .stat-label { color: var(--muted); font-size: 16px; margin-bottom: 14px; }
+  .stat-value { font-size: 38px; font-weight: 700; margin-bottom: 14px; }
+  .stat-value.green { color: var(--green); }
+  .stat-note { color: var(--muted); font-size: 14px; }
+
+  /* ===== Requests table ===== */
+  .card h3 { font-size: 24px; margin: 0 0 12px; }
+  .toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin: 22px 0 14px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tab { border: 1px solid var(--line); background: #fff; color: var(--muted); padding: 8px 16px; border-radius: 999px; font-size: 14px; font-weight: 500; }
+  .tab.on { background: var(--navy-active); color: #fff; border-color: var(--navy-active); }
+  .search { border: 1px solid var(--line); border-radius: 10px; padding: 9px 14px; font-size: 14px; font-family: inherit; min-width: 220px; }
+  .wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 760px; }
+  th { text-align: left; font-size: 12px; letter-spacing: .1em; color: #8a94ad; font-weight: 600; padding: 16px 14px; border-bottom: 1px solid var(--line); text-transform: uppercase; }
+  td { padding: 20px 14px; border-bottom: 1px solid var(--line); font-size: 15px; }
+  tr:last-child td { border-bottom: 0; }
+  td small { display: block; color: var(--muted); font-size: 13px; }
+  .low { color: var(--red); font-weight: 600; }
+  .empty { text-align: center; color: var(--muted); padding: 30px; }
+
+  .pill { display: inline-block; padding: 5px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .pill.pending { background: #e9edf8; color: #44527a; }
+  .pill.review  { background: #fdf0cf; color: #a3690a; }
+  .pill.rec     { background: #d9f5e3; color: #146c37; }
+  .pill.notrec  { background: #fde2e0; color: #b42318; }
+  .ext { background: #ede9fe; color: #5b21b6; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; margin-left: 6px; }
+
+  .btn { background: var(--blue); color: #fff; border: 0; padding: 9px 16px; border-radius: 10px; font-size: 14px; font-weight: 600; }
+  .btn.ghost { background: #fff; color: var(--blue-dark); border: 1px solid var(--line); }
+  .btn.danger { background: var(--red); }
+
+  /* ===== Modal + toast ===== */
+  .modal-bg { position: fixed; inset: 0; background: rgba(24,35,63,.55); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 50; }
+  .modal-bg.open { display: flex; }
+  .modal { background: #fff; border-radius: 18px; padding: 28px; width: 100%; max-width: 540px; max-height: 92vh; overflow: auto; }
+  .modal h3 { margin: 0 0 4px; font-size: 22px; }
+  .dl { display: grid; grid-template-columns: 130px 1fr; gap: 10px 12px; font-size: 15px; margin: 18px 0; }
+  .dl dt { color: var(--muted); } .dl dd { margin: 0; }
+  .note { background: #eef2ff; border-left: 4px solid var(--blue); border-radius: 8px; padding: 12px 14px; font-size: 14px; margin: 14px 0; }
+  label { display: block; font-weight: 600; font-size: 14px; margin: 14px 0 6px; }
+  textarea { width: 100%; border: 1px solid #cfd6e6; border-radius: 10px; padding: 10px; font: inherit; font-size: 14px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #fff; padding: 12px 20px;
+           border-radius: 10px; font-size: 14px; display: none; z-index: 60; max-width: 90%; }
+
+  /* ===== Tablet / mobile: sidebar becomes a top strip ===== */
+  @media (max-width: 860px) {
+    .app { flex-direction: column; }
+    .side { width: 100%; padding: 18px 16px; }
+    .brand-sub { margin-bottom: 14px; }
+    .nav { flex-direction: row; overflow-x: auto; }
+    .nav button { white-space: nowrap; padding: 10px 14px; font-size: 15px; }
+    .side-foot { display: none; }
+    .main { padding: 28px 16px; }
+    h1 { font-size: 28px; }
+    .hero { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="side" aria-label="Main navigation">
+    <div class="brand">EventPass</div>
+    <div class="brand-sub">EVENT MANAGEMENT</div>
+    <nav class="nav">
+      <button class="on" onclick="goHome()">Dashboard</button>
+      <button onclick="goRequests()">Review Requests</button>
+      <button onclick="soon('Students')">Students</button>
+      <button onclick="soon('Attendance')">Attendance</button>
+    </nav>
+    <div class="side-foot">Technical Event Portal</div>
+  </aside>
+
+  <!-- ===== Main content ===== -->
+  <main class="main" id="top">
+    <header class="head">
+      <div>
+        <p class="eyebrow">FACULTY PORTAL</p>
+        <h1>Dashboard</h1>
+        <p class="sub">Review student event requests and recommend decisions.</p>
+      </div>
+      <div class="avatar" aria-label="Faculty profile">F</div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <small>WELCOME TO EVENTPASS</small>
+        <h2>Requests are waiting for your review.</h2>
+        <p>Check attendance eligibility, add remarks and recommend a decision.</p>
+      </div>
+      <button class="hero-btn" onclick="showPending()">Review Pending</button>
+    </section>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="card" id="requests">
+      <h3>Student Requests</h3>
+      <p class="sub">Open a request to see the student's details and add your remarks.</p>
+      <div class="toolbar">
+        <div class="tabs" id="tabs" role="group" aria-label="Filter by status"></div>
+        <input class="search" id="q" type="search" placeholder="Search student, ID or event" aria-label="Search requests">
+      </div>
+      <div class="wrap">
+        <table>
+          <thead><tr><th>Reference</th><th>Student</th><th>Event</th><th>Attendance</th><th>Event date</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Review modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div id="mBody"></div></div>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+  /* ===== DEMONSTRATION DATA. Replace with real records later. ===== */
+  const THRESHOLD = 75;
+  const requests = [
+    { ref: "EVT-2026-001", name: "Aarav Sharma", sid: "22AI001", event: "National Hackathon",     att: 87, date: "20 Oct 2026", status: "Under Review" },
+    { ref: "EVT-2026-002", name: "Diya Menon",   sid: "22AI002", event: "Web Dev Workshop",       att: 91, date: "24 Oct 2026", status: "Pending" },
+    { ref: "EVT-2026-003", name: "Rohan Verma",  sid: "22AI003", event: "Cyber Security CTF",     att: 68, date: "27 Oct 2026", status: "Under Review" },
+    { ref: "EVT-2026-004", name: "Sneha Patel",  sid: "22AI004", event: "Cloud Bootcamp",         att: 72, date: "02 Nov 2026", status: "Not Recommended" },
+    { ref: "EVT-2026-005", name: "Karthik Rao",  sid: "22AI005", event: "AI/ML Hackathon",        att: 82, date: "05 Nov 2026", status: "Recommended" },
+    { ref: "EVT-2026-006", name: "Ishita Nair",  sid: "22AI006", event: "Google Cloud Study Jam", att: 79, date: "18 Nov 2026", status: "Pending", external: true, organizer: "GDG Hyderabad" }
+  ];
+  const PILL = { "Pending": "pending", "Under Review": "review", "Recommended": "rec", "Not Recommended": "notrec" };
+  const TABS = ["All", "Pending", "Under Review", "Reviewed"];
+  let tab = "All";
+
+  const pill = s => `<span class="pill ${PILL[s]}">${s}</span>`;
+  const isOpen = r => r.status === "Pending" || r.status === "Under Review";
+  const el = id => document.getElementById(id);
+
+  /* ----- Stat cards ----- */
+  function renderStats() {
+    const eligible = requests.filter(r => r.att >= THRESHOLD).length;
+    const card = (label, value, note, cls = "") =>
+      `<div class="card"><div class="stat-label">${label}</div><div class="stat-value ${cls}">${value}</div><div class="stat-note">${note}</div></div>`;
+    el("stats").innerHTML =
+      card("Assigned Students", requests.length, "Sample data") +
+      card("Pending Reviews", requests.filter(isOpen).length, "Awaiting your action") +
+      card("Eligible Students", eligible, "Based on a " + THRESHOLD + "% threshold", "green") +
+      card("Reviewed", requests.filter(r => !isOpen(r)).length, "Sample data");
+  }
+
+  /* ----- Filter tabs + table ----- */
+  function renderTabs() {
+    el("tabs").innerHTML = TABS.map(t =>
+      `<button class="tab ${t === tab ? "on" : ""}" onclick="setTab('${t}')">${t}</button>`).join("");
+  }
+  function setTab(t) { tab = t; renderTabs(); renderRows(); }
+
+  function renderRows() {
+    const q = el("q").value.toLowerCase();
+    const list = requests.filter(r =>
+      (tab === "All" || (tab === "Reviewed" ? !isOpen(r) : r.status === tab)) &&
+      (r.name + r.sid + r.event).toLowerCase().includes(q));
+    el("rows").innerHTML = list.length ? list.map(r => `<tr>
+      <td>${r.ref}</td>
+      <td>${r.name}<small>${r.sid}</small></td>
+      <td>${r.event}${r.external ? '<span class="ext">External</span>' : ""}</td>
+      <td class="${r.att < THRESHOLD ? "low" : ""}">${r.att}%</td>
+      <td>${r.date}</td>
+      <td>${pill(r.status)}</td>
+      <td><button class="btn ghost" onclick="openReview('${r.ref}')">Review</button></td></tr>`).join("")
+      : '<tr><td colspan="7" class="empty">No requests match your filters.</td></tr>';
+  }
+
+  /* ----- Review modal ----- */
+  function openReview(ref) {
+    const r = requests.find(x => x.ref === ref);
+    const ok = r.att >= THRESHOLD;
+    el("mBody").innerHTML = `
+      <h3>Review ${r.ref}</h3>
+      <div class="sub">${pill(r.status)}</div>
+      <dl class="dl">
+        <dt>Student</dt><dd>${r.name} (${r.sid})</dd>
+        <dt>Event</dt><dd>${r.event}${r.external ? ' <span class="ext">External</span>' : ""}</dd>
+        ${r.external ? `<dt>Organizer</dt><dd>${r.organizer}</dd>` : ""}
+        <dt>Event date</dt><dd>${r.date}</dd>
+        <dt>Attendance</dt><dd class="${ok ? "" : "low"}">${r.att}% - ${ok ? "meets" : "below"} the ${THRESHOLD}% threshold</dd>
+      </dl>
+      ${r.external ? '<div class="note">External event: not on the university list. Check the organizer and date before recommending.</div>' : ""}
+      <label for="remarks">Your remarks</label>
+      <textarea id="remarks" rows="3" placeholder="Add comments for the Event In-Charge..."></textarea>
+      <div class="note">UI demonstration only. Nothing is saved or sent.</div>
+      <div class="actions">
+        <button class="btn" onclick="demo('Recommend Approval')">Recommend Approval</button>
+        <button class="btn danger" onclick="demo('Recommend Rejection')">Recommend Rejection</button>
+        <button class="btn ghost" onclick="closeModal()">Close</button>
+      </div>`;
+    el("modal").classList.add("open");
+  }
+  function closeModal() { el("modal").classList.remove("open"); }
+  function demo(label) { closeModal(); toast('UI demo: "' + label + '" clicked. No data was changed.'); }
+
+  /* ----- Small helpers ----- */
+  function toast(msg) { const t = el("toast"); t.textContent = msg; t.style.display = "block"; setTimeout(() => t.style.display = "none", 3500); }
+  function soon(name) { toast(name + " page is a placeholder for now."); }
+  function goHome() { window.scrollTo({ top: 0, behavior: "smooth" }); }
+  function goRequests() { el("requests").scrollIntoView({ behavior: "smooth" }); }
+  function showPending() { setTab("Pending"); goRequests(); }
+
+  el("q").addEventListener("input", renderRows);
+  el("modal").addEventListener("click", e => { if (e.target.id === "modal") closeModal(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+  renderStats(); renderTabs(); renderRows();
+</script>
+</body>
+</html>
