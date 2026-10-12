@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Technical Event Approval Portal – Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background shapes -->
+  <div class="bg-shape bg-shape--top-right" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape--bottom-left" aria-hidden="true"></div>
+
+  <!-- Left illustration: graduation cap + books -->
+  <svg class="art art--left" viewBox="0 0 320 280" aria-hidden="true">
+    <path d="M60 70 C90 20 190 10 250 50 C320 95 310 190 250 235 C190 280 90 270 55 215 C25 170 30 110 60 70Z" fill="#e8eefc"/>
+    <!-- leaves -->
+    <path d="M30 150 C20 110 45 85 70 80 C80 115 62 145 30 150Z" fill="#a9e3ee"/>
+    <path d="M18 205 C20 175 50 165 78 170 C75 200 50 215 18 205Z" fill="#7fd3e4"/>
+    <path d="M52 230 C55 190 70 160 78 150" stroke="#8fd8e8" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- books -->
+    <rect x="75" y="188" width="170" height="26" rx="6" fill="#9fb8f4"/>
+    <rect x="95" y="190" width="150" height="22" rx="5" fill="#d9e3fb"/>
+    <rect x="60" y="214" width="185" height="28" rx="6" fill="#8aa7f0"/>
+    <rect x="130" y="217" width="115" height="22" rx="5" fill="#e6ebfb"/>
+    <rect x="75" y="160" width="170" height="28" rx="6" fill="#b9cbf7"/>
+    <rect x="140" y="163" width="105" height="22" rx="5" fill="#f1f4fd"/>
+    <!-- cap -->
+    <path d="M110 120 v34 c0 14 40 24 66 24 s66 -10 66 -24 v-34z" fill="#4f82f3"/>
+    <path d="M80 96 L176 60 L272 96 L176 138Z" fill="#8aa7f5"/>
+    <path d="M176 96 L272 96 L176 138Z" fill="#7192ee"/>
+    <line x1="256" y1="100" x2="256" y2="148" stroke="#5b86f1" stroke-width="3"/>
+    <path d="M250 146 h12 l-3 16 h-6z" fill="#5b86f1"/>
+  </svg>
+
+  <!-- Right illustration: calendar + people -->
+  <svg class="art art--right" viewBox="0 0 320 280" aria-hidden="true">
+    <path d="M30 120 C40 60 120 30 200 45 C280 60 315 130 295 195 C275 255 195 275 130 260 C60 245 20 190 30 120Z" fill="#e8eefc"/>
+    <!-- calendar -->
+    <g transform="rotate(-5 120 130)">
+      <rect x="45" y="70" width="150" height="130" rx="10" fill="#dbe6fc" stroke="#7da0f3" stroke-width="4"/>
+      <rect x="49" y="74" width="142" height="30" rx="7" fill="#9db9f6"/>
+      <rect x="75" y="58" width="8" height="26" rx="4" fill="#6f95f1"/>
+      <rect x="155" y="58" width="8" height="26" rx="4" fill="#6f95f1"/>
+      <path d="M120 120 l9 19 21 3 -15 15 4 21 -19-10 -19 10 4-21 -15-15 21-3z" fill="#7da0f3"/>
+    </g>
+    <!-- people -->
+    <circle cx="206" cy="190" r="22" fill="#a9bff6"/>
+    <path d="M168 255 c0-28 18-44 38-44 s38 16 38 44z" fill="#8aa7f0"/>
+    <circle cx="150" cy="212" r="12" fill="#8aa7f0"/>
+    <path d="M130 255 c0-18 9-28 20-28 s20 10 20 28z" fill="#7192ee"/>
+    <circle cx="260" cy="208" r="13" fill="#9db4f4"/>
+    <path d="M238 255 c0-20 10-32 22-32 s22 12 22 32z" fill="#8aa7f0"/>
+    <!-- sparkle lines -->
+    <g stroke="#7da0f3" stroke-width="4" stroke-linecap="round">
+      <line x1="233" y1="46" x2="236" y2="68"/>
+      <line x1="270" y1="68" x2="258" y2="82"/>
+      <line x1="290" y1="106" x2="276" y2="110"/>
+    </g>
+  </svg>
+
+  <main class="page">
+
+    <!-- Header -->
+    <header class="brand">
+      <svg class="brand__icon" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="6" y="12" width="52" height="46" rx="9" fill="none" stroke="#2f6df6" stroke-width="6"/>
+        <rect x="10" y="16" width="44" height="12" fill="#2f6df6"/>
+        <rect x="17" y="4" width="7" height="14" rx="3.5" fill="#2f6df6"/>
+        <rect x="40" y="4" width="7" height="14" rx="3.5" fill="#2f6df6"/>
+        <path d="M32 29 l4.5 9.5 10.5 1.5 -7.6 7.4 1.8 10.4 -9.2 -4.9 -9.2 4.9 1.8-10.4 -7.6-7.4 10.5-1.5z" fill="#2f6df6" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+      <h1 class="brand__title">Technical Event Approval Portal</h1>
+      <p class="brand__tagline">
+        <span>Apply</span><i></i><span>Get Approved</span><i></i><span>Attend</span><i></i><span>Grow</span>
+      </p>
+    </header>
+
+    <!-- Login card -->
+    <section class="card" aria-labelledby="login-heading">
+
+      <div class="roles" role="tablist" aria-label="Choose your role">
+        <button class="role role--active" type="button" role="tab" aria-selected="true" data-role="student">
+          <svg class="role__icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="16" cy="10" r="5"/>
+            <path d="M5 27c0-6 5-10 11-10s11 4 11 10z"/>
+          </svg>
+          <span class="role__text">
+            <strong>Student</strong>
+            <small>Access your events and requests</small>
+          </span>
+        </button>
+
+        <button class="role" type="button" role="tab" aria-selected="false" data-role="faculty">
+          <svg class="role__icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="16" cy="9" r="4.5"/>
+            <circle cx="6.5" cy="12" r="3"/>
+            <circle cx="25.5" cy="12" r="3"/>
+            <path d="M8 26c0-5 3.5-8 8-8s8 3 8 8z"/>
+            <path d="M1.5 22c0-3 2-5 5-5M30.5 22c0-3-2-5-5-5"/>
+          </svg>
+          <span class="role__text">
+            <strong>Faculty</strong>
+            <small>Manage approvals and attendance</small>
+          </span>
+        </button>
+      </div>
+
+      <h2 id="login-heading" class="card__title">Student Login</h2>
+      <p id="login-sub" class="card__sub">Sign in with your student credentials to continue.</p>
+
+      <form class="form" action="#" method="post" novalidate>
+
+        <label class="field">
+          <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2.5"/>
+            <path d="M3.5 7l8.5 6.5L20.5 7"/>
+          </svg>
+          <input type="email" name="email" placeholder="Email address" autocomplete="email" required />
+        </label>
+
+        <label class="field">
+          <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/>
+            <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>
+          </svg>
+          <input id="password" type="password" name="password" placeholder="Password" autocomplete="current-password" required />
+          <button class="field__toggle" type="button" aria-label="Show password" id="toggle-password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </label>
+
+        <button class="btn" type="submit">
+          <span>Login</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 12h16M14 6l6 6-6 6"/>
+          </svg>
+        </button>
+
+        <a class="link link--center" href="#">Forgot password?</a>
+      </form>
+
+      <div class="card__footer">
+        Don't have an account? <a class="link" href="#">Contact your administrator</a>
+      </div>
+    </section>
+
+    <footer class="page__footer">
+      <span>More Events</span><i></i><span>More Opportunities</span><i></i><span>A Brighter Future</span>
+    </footer>
+  </main>
+
+  <script>
+    // Switch between Student / Faculty
+    const copy = {
+      student: { title: "Student Login", sub: "Sign in with your student credentials to continue." },
+      faculty: { title: "Faculty Login", sub: "Sign in with your faculty credentials to continue." }
+    };
+    const roles = document.querySelectorAll(".role");
+    roles.forEach(btn => {
+      btn.addEventListener("click", () => {
+        roles.forEach(b => {
+          b.classList.toggle("role--active", b === btn);
+          b.setAttribute("aria-selected", b === btn);
+        });
+        const c = copy[btn.dataset.role];
+        document.getElementById("login-heading").textContent = c.title;
+        document.getElementById("login-sub").textContent = c.sub;
+      });
+    });
+
+    // Show / hide password
+    const pwd = document.getElementById("password");
+    const toggle = document.getElementById("toggle-password");
+    toggle.addEventListener("click", () => {
+      const show = pwd.type === "password";
+      pwd.type = show ? "text" : "password";
+      toggle.setAttribute("aria-label", show ? "Hide password" : "Show password");
+    });
+  </script>
+</body>
+</html>
